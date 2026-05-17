@@ -280,43 +280,6 @@ footer{background:var(--navy2);border-top:1px solid var(--border);padding:2rem 5
   </div>
 </div>
 
-<!-- AI WRITE SECTION -->
-<div class="ai-section fade-in" style="margin:3rem auto;max-width:1100px;margin-right:5rem;margin-left:5rem" id="aiSection">
-  <h3 data-ar="✍️ اكتب مقالاً جديداً بمساعدة AI" data-en="✍️ Write a New Article with AI Assistance">✍️ اكتب مقالاً جديداً بمساعدة AI</h3>
-  <p data-ar="أدخل موضوع المقال والتفاصيل وسيساعدك الذكاء الاصطناعي في كتابة مسودة احترافية." data-en="Enter the article topic and details and AI will help you write a professional draft.">أدخل موضوع المقال والتفاصيل وسيساعدك الذكاء الاصطناعي في كتابة مسودة احترافية.</p>
-  <div class="ai-form">
-    <div class="ai-row">
-      <input type="text" id="aiTitle" placeholder="عنوان المقال..." />
-      <select id="aiCategory">
-        <option value="">اختر التصنيف</option>
-        <option value="زكاة وضريبة">زكاة وضريبة</option>
-        <option value="محاسبة">محاسبة</option>
-        <option value="تحليل مالي">تحليل مالي</option>
-        <option value="تطوير مهني">تطوير مهني</option>
-      </select>
-    </div>
-    <textarea id="aiPoints" placeholder="النقاط الرئيسية التي تريد تغطيتها في المقال..."></textarea>
-    <div class="ai-row">
-      <select id="aiLang">
-        <option value="ar">عربي</option>
-        <option value="en">English</option>
-      </select>
-      <select id="aiTone">
-        <option value="professional">أسلوب مهني</option>
-        <option value="simple">أسلوب مبسط</option>
-        <option value="educational">أسلوب تعليمي</option>
-      </select>
-    </div>
-    <button class="btn-ai" id="aiBtn" onclick="generateArticle()">
-      <span id="aiBtnText">🤖 اكتب المقال بالذكاء الاصطناعي</span>
-    </button>
-  </div>
-  <div class="ai-result" id="aiResult">
-    <h4 id="aiResultTitle">المقال المقترح:</h4>
-    <div class="ai-result-text" id="aiResultText"></div>
-  </div>
-</div>
-
 <!-- POST MODAL -->
 <div class="post-modal" id="postModal">
   <div class="post-modal-inner">
@@ -703,49 +666,7 @@ function filterPosts(){
   }
 }
 
-async function generateArticle(){
-  const title = document.getElementById('aiTitle').value.trim();
-  const category = document.getElementById('aiCategory').value;
-  const points = document.getElementById('aiPoints').value.trim();
-  const lang = document.getElementById('aiLang').value;
-  const tone = document.getElementById('aiTone').value;
 
-  if(!title){ alert(currentLang==='ar'?'أدخل عنوان المقال':'Please enter article title'); return; }
-
-  const btn = document.getElementById('aiBtn');
-  const btnText = document.getElementById('aiBtnText');
-  btn.disabled = true;
-  btnText.textContent = currentLang==='ar' ? '⟳ جارٍ الكتابة...' : '⟳ Writing...';
-
-  const toneMap = {professional:'مهني واحترافي',simple:'مبسط وسهل الفهم',educational:'تعليمي تدريبي'};
-  const prompt = lang==='ar'
-    ? `اكتب مقالاً ${toneMap[tone]||'مهنياً'} بالعربية في مجال ${category||'المالية'} بعنوان: "${title}"\n${points?'النقاط الرئيسية:\n'+points:''}\n\nاكتب المقال بشكل منظم مع عناوين فرعية ونقاط واضحة. المقال يجب أن يكون عملياً ومفيداً ويعكس خبرة مالية حقيقية.`
-    : `Write a ${tone} article in English about ${category||'finance'} titled: "${title}"\n${points?'Key points:\n'+points:''}\n\nWrite a well-structured article with subheadings and clear points. Make it practical and reflect real financial expertise.`;
-
-  try {
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({
-        model:'claude-sonnet-4-20250514',
-        max_tokens:1500,
-        messages:[{role:'user',content:prompt}]
-      })
-    });
-    const data = await res.json();
-    const text = data.content?.[0]?.text || (currentLang==='ar'?'حدث خطأ':'An error occurred');
-    document.getElementById('aiResultTitle').textContent = currentLang==='ar'?'المقال المقترح:':'Suggested Article:';
-    document.getElementById('aiResultText').textContent = text;
-    document.getElementById('aiResult').classList.add('active');
-    document.getElementById('aiResult').scrollIntoView({behavior:'smooth',block:'start'});
-  } catch(e){
-    document.getElementById('aiResultText').textContent = currentLang==='ar'?'حدث خطأ في الاتصال':'Connection error';
-    document.getElementById('aiResult').classList.add('active');
-  }
-
-  btn.disabled = false;
-  btnText.textContent = currentLang==='ar'?'🤖 اكتب المقال بالذكاء الاصطناعي':'🤖 Generate Article with AI';
-}
 
 let isEn = false;
 function toggleLang(){
