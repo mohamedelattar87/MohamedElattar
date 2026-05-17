@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>لوحة التحكم | محمد العطار</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --navy:#0B1120;--navy2:#111827;--navy3:#1A2438;--navy4:#243047;
+  --teal:#0EA5E9;--teal2:#38BDF8;--teal-dim:rgba(14,165,233,0.1);--teal-border:rgba(14,165,233,0.22);
+  --gold:#F59E0B;--gold2:#FCD34D;
+  --text:#F8FAFC;--text2:#CBD5E1;--text3:#94A3B8;
+  --border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.13);
+  --green:#10B981;--red:#EF4444;
+}
+body{background:var(--navy);color:var(--text);font-family:'Tajawal',sans-serif;font-size:16px;min-height:100vh}
+
+/* LOGIN */
+#loginScreen{position:fixed;inset:0;background:var(--navy);display:flex;align-items:center;justify-content:center;z-index:9999}
+.login-box{background:var(--navy3);border:1px solid var(--border2);border-radius:16px;padding:3rem;width:100%;max-width:400px;text-align:center}
+.login-box h2{font-size:1.5rem;font-weight:700;margin-bottom:0.5rem;color:var(--text)}
+.login-box p{font-size:0.9rem;color:var(--text3);margin-bottom:2rem}
+.login-input{width:100%;background:var(--navy4);border:1px solid var(--border2);border-radius:8px;padding:0.9rem 1.2rem;color:var(--text);font-family:'Tajawal',sans-serif;font-size:1rem;outline:none;text-align:center;letter-spacing:0.3em;margin-bottom:1rem;direction:ltr}
+.login-input:focus{border-color:var(--teal)}
+.login-btn{width:100%;padding:0.9rem;background:var(--teal);color:#fff;font-family:'Tajawal',sans-serif;font-weight:700;font-size:1rem;border:none;border-radius:8px;cursor:pointer;transition:all 0.3s}
+.login-btn:hover{background:var(--teal2)}
+.login-error{color:#EF4444;font-size:0.88rem;margin-top:0.8rem;display:none}
+
+/* MAIN LAYOUT */
+#adminPanel{display:none}
+.admin-nav{background:var(--navy2);border-bottom:1px solid var(--border);padding:1rem 2rem;display:flex;align-items:center;justify-content:space-between}
+.admin-nav-brand{font-size:1.1rem;font-weight:700;color:var(--teal2)}
+.admin-nav-brand span{color:var(--text3);font-size:0.85rem;font-weight:400;margin-right:0.8rem}
+.logout-btn{background:transparent;border:1px solid var(--border2);color:var(--text3);padding:0.3rem 1rem;border-radius:6px;cursor:pointer;font-family:'Tajawal',sans-serif;font-size:0.85rem;transition:all 0.3s}
+.logout-btn:hover{border-color:var(--red);color:var(--red)}
+
+.admin-body{max-width:1000px;margin:0 auto;padding:2rem}
+
+/* TABS */
+.tabs{display:flex;gap:0.5rem;margin-bottom:2rem;background:var(--navy3);border-radius:10px;padding:0.4rem}
+.tab{flex:1;padding:0.7rem;text-align:center;border-radius:8px;cursor:pointer;font-size:0.92rem;font-weight:600;color:var(--text3);transition:all 0.3s;border:none;background:transparent;font-family:'Tajawal',sans-serif}
+.tab.active{background:var(--teal);color:#fff}
+.tab-content{display:none}
+.tab-content.active{display:block}
+
+/* CARDS */
+.card{background:var(--navy3);border:1px solid var(--border);border-radius:14px;padding:2rem;margin-bottom:1.5rem}
+.card h3{font-size:1.1rem;font-weight:700;color:var(--text);margin-bottom:0.4rem}
+.card p{font-size:0.88rem;color:var(--text3);margin-bottom:1.5rem}
+
+/* FORM */
+.form-group{display:flex;flex-direction:column;gap:0.5rem;margin-bottom:1.2rem}
+.form-group label{font-size:0.9rem;color:var(--text2);font-weight:600}
+.form-group input,.form-group select,.form-group textarea{background:var(--navy4);border:1px solid var(--border2);border-radius:8px;padding:0.8rem 1rem;color:var(--text);font-family:'Tajawal',sans-serif;font-size:0.95rem;outline:none;transition:border-color 0.3s;direction:rtl}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--teal)}
+.form-group textarea{resize:vertical;min-height:140px}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+
+/* BUTTONS */
+.btn{padding:0.8rem 1.8rem;border:none;border-radius:8px;cursor:pointer;font-family:'Tajawal',sans-serif;font-weight:700;font-size:0.95rem;transition:all 0.3s;display:inline-flex;align-items:center;gap:0.5rem}
+.btn-teal{background:var(--teal);color:#fff}.btn-teal:hover{background:var(--teal2);transform:translateY(-1px)}
+.btn-gold{background:var(--gold);color:#000}.btn-gold:hover{background:var(--gold2);transform:translateY(-1px)}
+.btn-green{background:var(--green);color:#fff}.btn-green:hover{opacity:0.88;transform:translateY(-1px)}
+.btn-outline{background:transparent;color:var(--teal2);border:1px solid var(--teal-border)}.btn-outline:hover{background:var(--teal-dim)}
+.btn:disabled{opacity:0.5;cursor:not-allowed;transform:none!important}
+.btn-row{display:flex;gap:1rem;flex-wrap:wrap;margin-top:1rem}
+
+/* AI RESULT */
+.ai-result-box{background:var(--navy4);border:1px solid var(--teal-border);border-radius:10px;padding:1.5rem;margin-top:1.2rem;display:none}
+.ai-result-box.show{display:block}
+.ai-result-box pre{font-family:'Tajawal',sans-serif;font-size:0.9rem;color:var(--text2);white-space:pre-wrap;line-height:1.9}
+
+/* CODE OUTPUT */
+.code-output{background:#0d1117;border:1px solid var(--border2);border-radius:10px;padding:1.5rem;margin-top:1rem;display:none;position:relative}
+.code-output.show{display:block}
+.code-output pre{font-family:'Courier New',monospace;font-size:0.8rem;color:#e6edf3;white-space:pre-wrap;max-height:300px;overflow-y:auto;line-height:1.6}
+.copy-btn{position:absolute;top:0.8rem;left:0.8rem;background:var(--teal-dim);border:1px solid var(--teal-border);color:var(--teal2);padding:0.3rem 0.8rem;border-radius:6px;cursor:pointer;font-size:0.8rem;font-family:'Tajawal',sans-serif;transition:all 0.3s}
+.copy-btn:hover{background:rgba(14,165,233,0.2)}
+
+/* POSTS LIST */
+.posts-list{display:flex;flex-direction:column;gap:1rem}
+.post-item{background:var(--navy4);border:1px solid var(--border);border-radius:10px;padding:1.2rem 1.5rem;display:flex;align-items:center;justify-content:space-between;gap:1rem}
+.post-item-info h4{font-size:0.95rem;font-weight:700;color:var(--text);margin-bottom:0.2rem}
+.post-item-info p{font-size:0.82rem;color:var(--text3)}
+.post-item-actions{display:flex;gap:0.5rem;flex-shrink:0}
+.tag-pill{display:inline-block;padding:2px 8px;border-radius:4px;font-size:0.72rem;font-weight:700}
+.tag-tax{background:rgba(14,165,233,0.1);color:var(--teal2)}
+.tag-accounting{background:rgba(245,158,11,0.1);color:var(--gold2)}
+.tag-career{background:rgba(52,211,153,0.1);color:#34D399}
+.tag-analysis{background:rgba(167,139,250,0.1);color:#A78BFA}
+
+/* INSTRUCTIONS */
+.steps{display:flex;flex-direction:column;gap:1rem;margin-top:1rem}
+.step{display:flex;gap:1rem;align-items:flex-start}
+.step-num{width:32px;height:32px;background:var(--teal-dim);border:1px solid var(--teal-border);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.85rem;font-weight:700;color:var(--teal2);flex-shrink:0}
+.step-text{font-size:0.9rem;color:var(--text2);line-height:1.8;padding-top:0.3rem}
+
+/* ALERT */
+.alert{padding:0.9rem 1.2rem;border-radius:8px;font-size:0.9rem;margin-bottom:1rem;display:none}
+.alert.show{display:block}
+.alert-success{background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.3);color:#34D399}
+.alert-error{background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.3);color:#F87171}
+
+@media(max-width:640px){
+  .form-row{grid-template-columns:1fr}
+  .admin-body{padding:1rem}
+  .btn-row{flex-direction:column}
+  .post-item{flex-direction:column;align-items:flex-start}
+}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="loginScreen">
+  <div class="login-box">
+    <div style="font-size:2.5rem;margin-bottom:1rem">🔐</div>
+    <h2>لوحة التحكم</h2>
+    <p>محمد العطار — الوصول الخاص</p>
+    <input type="password" class="login-input" id="passwordInput" placeholder="••••••••" onkeydown="if(event.key==='Enter')checkPassword()">
+    <button class="login-btn" onclick="checkPassword()">دخول</button>
+    <p class="login-error" id="loginError">❌ كلمة المرور غير صحيحة</p>
+  </div>
+</div>
+
+<!-- ADMIN PANEL -->
+<div id="adminPanel">
+
+  <div class="admin-nav">
+    <div class="admin-nav-brand">
+      ⚙️ لوحة التحكم
+      <span>| محمد العطار</span>
+    </div>
+    <div style="display:flex;gap:1rem;align-items:center">
+      <a href="blog.html" target="_blank" style="color:var(--teal2);font-size:0.88rem;text-decoration:none">🌐 عرض المدونة</a>
+      <a href="index.html" target="_blank" style="color:var(--text3);font-size:0.88rem;text-decoration:none">🏠 الموقع</a>
+      <button class="logout-btn" onclick="logout()">خروج</button>
+    </div>
+  </div>
+
+  <div class="admin-body">
+
+    <!-- TABS -->
+    <div class="tabs">
+      <button class="tab active" onclick="switchTab('write')">✍️ كتابة مقال</button>
+      <button class="tab" onclick="switchTab('ai')">🤖 مساعد AI</button>
+      <button class="tab" onclick="switchTab('posts')">📚 المقالات</button>
+      <button class="tab" onclick="switchTab('howto')">📖 كيفية النشر</button>
+    </div>
+
+    <!-- TAB: WRITE -->
+    <div class="tab-content active" id="tab-write">
+      <div class="card">
+        <h3>✍️ كتابة مقال جديد</h3>
+        <p>اكتب مقالك وانسخ الكود الجاهز لإضافته في blog.html</p>
+
+        <div class="alert" id="writeAlert"></div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>عنوان المقال (عربي)</label>
+            <input type="text" id="titleAr" placeholder="مثال: كيف تحسب الزكاة...">
+          </div>
+          <div class="form-group">
+            <label>Article Title (English)</label>
+            <input type="text" id="titleEn" placeholder="e.g. How to Calculate Zakat...">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>التصنيف</label>
+            <select id="postCategory">
+              <option value="tax">زكاة وضريبة</option>
+              <option value="accounting">محاسبة</option>
+              <option value="analysis">تحليل مالي</option>
+              <option value="career">تطوير مهني</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>الأيقونة (Emoji)</label>
+            <input type="text" id="postEmoji" placeholder="مثال: 📊 أو 💰 أو 🎯" value="📝">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>ملخص قصير (عربي)</label>
+            <input type="text" id="summaryAr" placeholder="جملة أو جملتان تصفان المقال...">
+          </div>
+          <div class="form-group">
+            <label>Short Summary (English)</label>
+            <input type="text" id="summaryEn" placeholder="One or two sentences describing the article...">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>التاريخ (عربي)</label>
+            <input type="text" id="dateAr" placeholder="مثال: مايو 2025">
+          </div>
+          <div class="form-group">
+            <label>Date (English)</label>
+            <input type="text" id="dateEn" placeholder="e.g. May 2025">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>محتوى المقال (عربي) — يمكن استخدام HTML بسيط</label>
+          <textarea id="contentAr" style="min-height:200px" placeholder="اكتب محتوى المقال هنا...&#10;&#10;يمكنك استخدام:&#10;&lt;h2&gt;عنوان فرعي&lt;/h2&gt;&#10;&lt;p&gt;فقرة&lt;/p&gt;&#10;&lt;ul&gt;&lt;li&gt;نقطة&lt;/li&gt;&lt;/ul&gt;"></textarea>
+        </div>
+
+        <div class="form-group">
+          <label>Article Content (English) — Simple HTML allowed</label>
+          <textarea id="contentEn" style="min-height:200px" placeholder="Write article content here..."></textarea>
+        </div>
+
+        <div class="form-group">
+          <label>وقت القراءة (دقائق)</label>
+          <input type="number" id="readTime" value="5" min="1" max="30" style="max-width:120px">
+        </div>
+
+        <div class="btn-row">
+          <button class="btn btn-teal" onclick="generateCode()">⚙️ توليد الكود</button>
+          <button class="btn btn-outline" onclick="clearForm()">🗑️ مسح</button>
+        </div>
+      </div>
+
+      <div class="code-output" id="codeOutput">
+        <button class="copy-btn" onclick="copyCode()">📋 نسخ الكود</button>
+        <pre id="codeText"></pre>
+      </div>
+
+      <div class="card" id="instructionsCard" style="display:none;margin-top:1.5rem;border-color:rgba(16,185,129,0.3)">
+        <h3 style="color:#34D399">✅ الكود جاهز! كيف تضيفه؟</h3>
+        <p>اتبع هذه الخطوات لإضافة المقال للموقع:</p>
+        <div class="steps">
+          <div class="step"><div class="step-num">1</div><div class="step-text">انسخ الكود من الأعلى باستخدام زر <strong>"📋 نسخ الكود"</strong></div></div>
+          <div class="step"><div class="step-num">2</div><div class="step-text">اذهب إلى <strong>GitHub → blog.html → القلم ✏️</strong></div></div>
+          <div class="step"><div class="step-num">3</div><div class="step-text">ابحث عن <code style="background:var(--navy4);padding:2px 6px;border-radius:4px;color:var(--teal2)">&lt;/div&gt; &lt;!-- END POSTS --&gt;</code> أو آخر بطاقة مقال</div></div>
+          <div class="step"><div class="step-num">4</div><div class="step-text">الصق الكود قبل هذا السطر مباشرة</div></div>
+          <div class="step"><div class="step-num">5</div><div class="step-text">اضغط <strong>Commit changes</strong> — سيظهر المقال خلال دقيقة!</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB: AI -->
+    <div class="tab-content" id="tab-ai">
+      <div class="card">
+        <h3>🤖 مساعد الكتابة بالذكاء الاصطناعي</h3>
+        <p>أدخل موضوع المقال وسيكتب لك Claude مسودة كاملة يمكنك نسخها في قسم الكتابة.</p>
+
+        <div class="form-group">
+          <label>موضوع المقال</label>
+          <input type="text" id="aiTopic" placeholder="مثال: أهمية التدفق النقدي في الشركات الناشئة">
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>التصنيف</label>
+            <select id="aiCat">
+              <option value="زكاة وضريبة">زكاة وضريبة</option>
+              <option value="محاسبة">محاسبة</option>
+              <option value="تحليل مالي">تحليل مالي</option>
+              <option value="تطوير مهني">تطوير مهني</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>اللغة</label>
+            <select id="aiLang">
+              <option value="ar">عربي</option>
+              <option value="en">English</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>نقاط تريد تغطيتها (اختياري)</label>
+          <textarea id="aiPoints" placeholder="مثال:&#10;- تعريف التدفق النقدي&#10;- الفرق بين الربح والتدفق&#10;- نصائح عملية" style="min-height:100px"></textarea>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>أسلوب الكتابة</label>
+            <select id="aiTone">
+              <option value="professional">مهني واحترافي</option>
+              <option value="simple">مبسط وسهل</option>
+              <option value="educational">تعليمي تدريبي</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>طول المقال</label>
+            <select id="aiLength">
+              <option value="medium">متوسط (500-800 كلمة)</option>
+              <option value="short">قصير (300-400 كلمة)</option>
+              <option value="long">طويل (1000+ كلمة)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="btn-row">
+          <button class="btn btn-gold" onclick="generateAI()" id="aiGenBtn">🤖 اكتب المقال</button>
+        </div>
+
+        <div class="ai-result-box" id="aiResultBox">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem">
+            <span style="font-size:0.9rem;font-weight:700;color:var(--teal2)">✅ المقال المقترح:</span>
+            <button class="btn btn-outline" style="padding:0.4rem 1rem;font-size:0.82rem" onclick="copyToWrite()">📝 نقل لقسم الكتابة</button>
+          </div>
+          <pre id="aiResultText" style="font-family:'Tajawal',sans-serif;font-size:0.92rem;color:var(--text2);white-space:pre-wrap;line-height:2"></pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB: POSTS -->
+    <div class="tab-content" id="tab-posts">
+      <div class="card">
+        <h3>📚 المقالات الحالية</h3>
+        <p>المقالات المنشورة في مدونتك حالياً</p>
+        <div class="posts-list">
+          <div class="post-item">
+            <div class="post-item-info">
+              <h4>كيف تحسب وعاء الزكاة لشركتك بشكل صحيح؟</h4>
+              <p>مايو 2025 · <span class="tag-pill tag-tax">زكاة وضريبة</span></p>
+            </div>
+            <div class="post-item-actions">
+              <span style="color:#34D399;font-size:0.82rem">✅ منشور</span>
+            </div>
+          </div>
+          <div class="post-item">
+            <div class="post-item-info">
+              <h4>5 مؤشرات مالية يجب أن يعرفها كل مدير مالي</h4>
+              <p>أبريل 2025 · <span class="tag-pill tag-analysis">تحليل مالي</span></p>
+            </div>
+            <div class="post-item-actions">
+              <span style="color:#34D399;font-size:0.82rem">✅ منشور</span>
+            </div>
+          </div>
+          <div class="post-item">
+            <div class="post-item-info">
+              <h4>ضريبة القيمة المضافة: الأخطاء الشائعة وكيف تتجنبها</h4>
+              <p>مارس 2025 · <span class="tag-pill tag-tax">زكاة وضريبة</span></p>
+            </div>
+            <div class="post-item-actions">
+              <span style="color:#34D399;font-size:0.82rem">✅ منشور</span>
+            </div>
+          </div>
+          <div class="post-item">
+            <div class="post-item-info">
+              <h4>رحلتي نحو شهادة CMA: نصائح وتجارب حقيقية</h4>
+              <p>فبراير 2025 · <span class="tag-pill tag-career">تطوير مهني</span></p>
+            </div>
+            <div class="post-item-actions">
+              <span style="color:#34D399;font-size:0.82rem">✅ منشور</span>
+            </div>
+          </div>
+          <div class="post-item">
+            <div class="post-item-info">
+              <h4>محاسبة المقاولات: التحديات والحلول العملية</h4>
+              <p>يناير 2025 · <span class="tag-pill tag-accounting">محاسبة</span></p>
+            </div>
+            <div class="post-item-actions">
+              <span style="color:#34D399;font-size:0.82rem">✅ منشور</span>
+            </div>
+          </div>
+          <div class="post-item">
+            <div class="post-item-info">
+              <h4>النمذجة المالية: من الصفر إلى الاحتراف</h4>
+              <p>ديسمبر 2024 · <span class="tag-pill tag-analysis">تحليل مالي</span></p>
+            </div>
+            <div class="post-item-actions">
+              <span style="color:#34D399;font-size:0.82rem">✅ منشور</span>
+            </div>
+          </div>
+          <div class="post-item">
+            <div class="post-item-info">
+              <h4>ضريبة الاستقطاع: دليل عملي للشركات السعودية</h4>
+              <p>نوفمبر 2024 · <span class="tag-pill tag-tax">زكاة وضريبة</span></p>
+            </div>
+            <div class="post-item-actions">
+              <span style="color:#34D399;font-size:0.82rem">✅ منشور</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB: HOW TO -->
+    <div class="tab-content" id="tab-howto">
+      <div class="card">
+        <h3>📖 كيفية إضافة مقال جديد</h3>
+        <p>دليل خطوة بخطوة لنشر مقال في مدونتك</p>
+        <div class="steps">
+          <div class="step"><div class="step-num">1</div><div class="step-text"><strong>اكتب المقال:</strong> استخدم تبويب "✍️ كتابة مقال" واملأ جميع الحقول</div></div>
+          <div class="step"><div class="step-num">2</div><div class="step-text"><strong>أو استخدم AI:</strong> تبويب "🤖 مساعد AI" — أدخل الموضوع والنقاط، اضغط "اكتب المقال"، انقل النتيجة لقسم الكتابة</div></div>
+          <div class="step"><div class="step-num">3</div><div class="step-text"><strong>ولّد الكود:</strong> اضغط "⚙️ توليد الكود" وانسخه</div></div>
+          <div class="step"><div class="step-num">4</div><div class="step-text"><strong>افتح GitHub:</strong> اذهب لـ <a href="https://github.com/mohamedelattar87/mohamedelattar87.github.io" target="_blank" style="color:var(--teal2)">github.com/mohamedelattar87/mohamedelattar87.github.io</a></div></div>
+          <div class="step"><div class="step-num">5</div><div class="step-text"><strong>عدّل blog.html:</strong> اضغط على الملف ← القلم ✏️</div></div>
+          <div class="step"><div class="step-num">6</div><div class="step-text"><strong>ابحث عن:</strong> <code style="background:var(--navy4);padding:2px 8px;border-radius:4px;color:var(--teal2);font-size:0.85rem">id="postsContainer"</code> ثم الصق الكود الجديد داخله بعد أول &lt;div&gt;</div></div>
+          <div class="step"><div class="step-num">7</div><div class="step-text"><strong>احفظ:</strong> اضغط Commit changes — المقال سيظهر خلال دقيقة! 🎉</div></div>
+        </div>
+      </div>
+
+      <div class="card" style="border-color:rgba(245,158,11,0.3)">
+        <h3 style="color:var(--gold2)">💡 نصائح مهمة</h3>
+        <p style="margin-bottom:0"></p>
+        <ul style="list-style:none;display:flex;flex-direction:column;gap:0.8rem;margin-top:1rem">
+          <li style="font-size:0.92rem;color:var(--text2);display:flex;gap:0.6rem"><span>✅</span> الكود المولّد جاهز للنسخ والصق مباشرة بدون تعديل</li>
+          <li style="font-size:0.92rem;color:var(--text2);display:flex;gap:0.6rem"><span>✅</span> كل مقال يظهر تلقائياً في صفحة المدونة وفي شبكة المقالات</li>
+          <li style="font-size:0.92rem;color:var(--text2);display:flex;gap:0.6rem"><span>✅</span> يمكنك استخدام HTML بسيط في المحتوى مثل &lt;h2&gt; و &lt;p&gt; و &lt;ul&gt;</li>
+          <li style="font-size:0.92rem;color:var(--text2);display:flex;gap:0.6rem"><span>⚠️</span> لا تشارك رابط هذه الصفحة مع أحد — هي خاصة بك فقط</li>
+          <li style="font-size:0.92rem;color:var(--text2);display:flex;gap:0.6rem"><span>💡</span> الرابط: <code style="background:var(--navy4);padding:2px 8px;border-radius:4px;color:var(--teal2)">mohamed-elattar.com/admin.html</code></li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+// PASSWORD - Change this to your own password
+const ADMIN_PASSWORD = 'elattar2025';
+
+function checkPassword(){
+  const pwd = document.getElementById('passwordInput').value;
+  if(pwd === ADMIN_PASSWORD){
+    document.getElementById('loginScreen').style.display = 'none';
+    document.getElementById('adminPanel').style.display = 'block';
+    sessionStorage.setItem('adminAuth','1');
+  } else {
+    document.getElementById('loginError').style.display = 'block';
+    document.getElementById('passwordInput').value = '';
+  }
+}
+
+function logout(){
+  sessionStorage.removeItem('adminAuth');
+  document.getElementById('loginScreen').style.display = 'flex';
+  document.getElementById('adminPanel').style.display = 'none';
+}
+
+// Auto-login if session exists
+if(sessionStorage.getItem('adminAuth')==='1'){
+  document.getElementById('loginScreen').style.display = 'none';
+  document.getElementById('adminPanel').style.display = 'block';
+}
+
+function switchTab(name){
+  document.querySelectorAll('.tab').forEach((t,i)=>{
+    const names=['write','ai','posts','howto'];
+    t.classList.toggle('active', names[i]===name);
+  });
+  document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));
+  document.getElementById('tab-'+name).classList.add('active');
+}
+
+function clearForm(){
+  ['titleAr','titleEn','summaryAr','summaryEn','contentAr','contentEn','postEmoji','dateAr','dateEn'].forEach(id=>{
+    document.getElementById(id).value = id==='postEmoji'?'📝':'';
+  });
+  document.getElementById('readTime').value = 5;
+  document.getElementById('codeOutput').classList.remove('show');
+  document.getElementById('instructionsCard').style.display = 'none';
+}
+
+function generateCode(){
+  const titleAr = document.getElementById('titleAr').value.trim();
+  const titleEn = document.getElementById('titleEn').value.trim();
+  const summaryAr = document.getElementById('summaryAr').value.trim();
+  const summaryEn = document.getElementById('summaryEn').value.trim();
+  const contentAr = document.getElementById('contentAr').value.trim();
+  const contentEn = document.getElementById('contentEn').value.trim();
+  const category = document.getElementById('postCategory').value;
+  const emoji = document.getElementById('postEmoji').value.trim() || '📝';
+  const dateAr = document.getElementById('dateAr').value.trim();
+  const dateEn = document.getElementById('dateEn').value.trim();
+  const readTime = document.getElementById('readTime').value;
+
+  if(!titleAr || !summaryAr || !contentAr){
+    const alert = document.getElementById('writeAlert');
+    alert.textContent = '⚠️ يرجى ملء العنوان والملخص والمحتوى على الأقل';
+    alert.className = 'alert alert-error show';
+    setTimeout(()=>alert.classList.remove('show'), 3000);
+    return;
+  }
+
+  const tagMap = {tax:'tax',accounting:'accounting',analysis:'analysis',career:'career'};
+  const tagArMap = {tax:'زكاة وضريبة',accounting:'محاسبة',analysis:'تحليل مالي',career:'تطوير مهني'};
+  const tagEnMap = {tax:'Zakat & Tax',accounting:'Accounting',analysis:'Financial Analysis',career:'Career'};
+
+  const newId = Date.now();
+  const tagClass = tagMap[category];
+  const tagAr = tagArMap[category];
+  const tagEn = tagEnMap[category];
+
+  const code = `    <div class="post-card" onclick="openPost(${newId})" data-category="${category}">
+      <div class="post-card-emoji">${emoji}</div>
+      <div class="post-card-body">
+        <span class="post-tag ${tagClass}" data-ar="${tagAr}" data-en="${tagEn}">${tagAr}</span>
+        <h3 data-ar="${titleAr}" data-en="${titleEn || titleAr}">${titleAr}</h3>
+        <p data-ar="${summaryAr}" data-en="${summaryEn || summaryAr}">${summaryAr}</p>
+        <div class="post-meta">
+          <span data-ar="${dateAr || 'مايو 2025'}" data-en="${dateEn || 'May 2025'}">${dateAr || 'مايو 2025'}</span>
+          <span class="read-more" data-ar="قراءة ←" data-en="Read →">قراءة ←</span>
+        </div>
+      </div>
+    </div>`;
+
+  const jsCode = `
+  // ======= مقال جديد: ${titleAr} =======
+  {
+    id:${newId}, category:'${category}', emoji:'${emoji}',
+    tag_ar:'${tagAr}', tag_en:'${tagEn}', tag_class:'${tagClass}',
+    title_ar:'${titleAr.replace(/'/g,"\\'")}',
+    title_en:'${(titleEn||titleAr).replace(/'/g,"\\'")}',
+    date_ar:'${dateAr||'مايو 2025'}', date_en:'${dateEn||'May 2025'}', read:'${readTime}',
+    content_ar:\`${contentAr}\`,
+    content_en:\`${contentEn||contentAr}\`
+  },`;
+
+  const fullCode = `<!-- ===== مقال جديد: ${titleAr} ===== -->
+<!-- 1. أضف هذا الكود داخل <div id="postsContainer"> في blog.html -->
+${code}
+
+<!-- ===== ======================================= ===== -->
+<!-- 2. أضف هذا الكود داخل مصفوفة POSTS في <script> في blog.html -->
+<!-- (ابحث عن "const POSTS = [" وأضف هذا في نهاية المصفوفة قبل "]") -->
+${jsCode}`;
+
+  document.getElementById('codeText').textContent = fullCode;
+  document.getElementById('codeOutput').classList.add('show');
+  document.getElementById('instructionsCard').style.display = 'block';
+  document.getElementById('instructionsCard').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function copyCode(){
+  const text = document.getElementById('codeText').textContent;
+  navigator.clipboard.writeText(text).then(()=>{
+    const btn = document.querySelector('.copy-btn');
+    btn.textContent = '✅ تم النسخ!';
+    setTimeout(()=>btn.textContent='📋 نسخ الكود', 2000);
+  });
+}
+
+async function generateAI(){
+  const topic = document.getElementById('aiTopic').value.trim();
+  if(!topic){ alert('أدخل موضوع المقال'); return; }
+
+  const category = document.getElementById('aiCat').value;
+  const lang = document.getElementById('aiLang').value;
+  const points = document.getElementById('aiPoints').value.trim();
+  const tone = document.getElementById('aiTone').value;
+  const length = document.getElementById('aiLength').value;
+
+  const lengthMap = {short:'قصير (300-400 كلمة)',medium:'متوسط (500-800 كلمة)',long:'طويل (1000+ كلمة)'};
+  const toneMap = {professional:'مهني واحترافي',simple:'مبسط وسهل الفهم',educational:'تعليمي تدريبي'};
+
+  const prompt = lang==='ar'
+    ? `أنت محمد العطار، خبير مالي ومحاسب معتمد بخبرة 15 سنة. اكتب مقالاً ${toneMap[tone]} ${lengthMap[length]} بالعربية في مجال ${category} بعنوان: "${topic}"${points?'\n\nيجب تغطية النقاط التالية:\n'+points:''}\n\nاكتب المقال بأسلوب عملي يعكس خبرة حقيقية. استخدم عناوين فرعية وأمثلة من الواقع. لا تكتب HTML، فقط نص عادي منظم.`
+    : `You are Mohamed Elattar, a certified finance expert with 15 years of experience. Write a ${tone} ${length} article in English about ${category} titled: "${topic}"${points?'\n\nCover these points:\n'+points:''}\n\nWrite practically with real expertise. Use subheadings and real examples. Plain text only, no HTML.`;
+
+  const btn = document.getElementById('aiGenBtn');
+  btn.disabled = true;
+  btn.innerHTML = '⟳ جارٍ الكتابة...';
+
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        model:'claude-sonnet-4-20250514',
+        max_tokens:1500,
+        messages:[{role:'user',content:prompt}]
+      })
+    });
+    const data = await res.json();
+    const text = data.content?.[0]?.text || 'حدث خطأ في الاتصال';
+    document.getElementById('aiResultText').textContent = text;
+    document.getElementById('aiResultBox').classList.add('show');
+    document.getElementById('aiResultBox').scrollIntoView({behavior:'smooth'});
+  } catch(e){
+    document.getElementById('aiResultText').textContent = 'حدث خطأ: ' + e.message;
+    document.getElementById('aiResultBox').classList.add('show');
+  }
+
+  btn.disabled = false;
+  btn.innerHTML = '🤖 اكتب المقال';
+}
+
+function copyToWrite(){
+  const text = document.getElementById('aiResultText').textContent;
+  document.getElementById('contentAr').value = text;
+  switchTab('write');
+  document.getElementById('contentAr').scrollIntoView({behavior:'smooth'});
+  document.getElementById('contentAr').focus();
+}
+</script>
+</body>
+</html>
