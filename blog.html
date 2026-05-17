@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>مدونة محمد العطار | Mohamed Elattar Blog</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=Tajawal:wght@300;400;500;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --navy:#0B1120;--navy2:#111827;--navy3:#1A2438;--navy4:#243047;
+  --teal:#0EA5E9;--teal2:#38BDF8;--teal3:#7DD3FC;
+  --teal-dim:rgba(14,165,233,0.1);--teal-border:rgba(14,165,233,0.22);
+  --gold:#F59E0B;--gold2:#FCD34D;
+  --text:#F8FAFC;--text2:#CBD5E1;--text3:#94A3B8;
+  --border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.13);
+}
+html{scroll-behavior:smooth}
+body{background:var(--navy);color:var(--text);font-family:'Tajawal',sans-serif;font-size:17px;font-weight:400;line-height:1.8;overflow-x:hidden}
+body.en{direction:ltr;font-family:'Inter',sans-serif}
+
+nav{position:fixed;top:0;left:0;right:0;z-index:200;display:flex;align-items:center;justify-content:space-between;padding:1rem 5rem;background:rgba(11,17,32,0.96);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+.nav-logo{font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--text);text-decoration:none}
+.nav-logo span{color:var(--teal2)}
+.nav-links{display:flex;gap:1.5rem;list-style:none;align-items:center}
+.nav-links a{color:var(--text3);font-size:0.92rem;text-decoration:none;font-weight:500;transition:color 0.3s}
+.nav-links a:hover{color:var(--teal2)}
+.lang-btn{background:var(--teal-dim);border:1px solid var(--teal-border);color:var(--teal2);font-family:'Tajawal',sans-serif;font-size:0.85rem;font-weight:600;padding:0.28rem 0.9rem;border-radius:6px;cursor:pointer;transition:all 0.3s}
+.lang-btn:hover{background:rgba(14,165,233,0.2)}
+
+/* HERO */
+.blog-hero{padding:9rem 5rem 4rem;text-align:center;position:relative;overflow:hidden}
+.blog-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 0%,rgba(14,165,233,0.08) 0%,transparent 60%);pointer-events:none}
+.blog-eyebrow{display:inline-flex;align-items:center;gap:0.7rem;font-size:0.88rem;font-weight:600;color:var(--teal2);margin-bottom:1rem;letter-spacing:0.06em;text-transform:uppercase}
+.blog-eyebrow::before,.blog-eyebrow::after{content:'';width:20px;height:2px;background:var(--teal);border-radius:2px}
+.blog-title{font-family:'Playfair Display',serif;font-size:clamp(2.2rem,4vw,3.2rem);font-weight:700;color:var(--text);margin-bottom:0.8rem}
+.blog-title span{color:var(--teal2)}
+.blog-subtitle{font-size:1.05rem;color:var(--text3);max-width:560px;margin:0 auto 2.5rem}
+
+/* SEARCH & FILTER */
+.blog-controls{max-width:1100px;margin:0 auto 3rem;display:flex;gap:1rem;flex-wrap:wrap;align-items:center;justify-content:space-between}
+.blog-search{flex:1;min-width:240px;position:relative}
+.blog-search input{width:100%;background:var(--navy3);border:1px solid var(--border2);border-radius:10px;padding:0.75rem 1rem 0.75rem 3rem;color:var(--text);font-family:'Tajawal',sans-serif;font-size:0.95rem;outline:none;transition:border-color 0.3s;direction:rtl}
+.blog-search input:focus{border-color:var(--teal)}
+.blog-search::before{content:'🔍';position:absolute;right:1rem;top:50%;transform:translateY(-50%);font-size:0.95rem}
+.filter-tags{display:flex;gap:0.6rem;flex-wrap:wrap}
+.filter-tag{padding:0.4rem 1rem;border:1px solid var(--border2);border-radius:100px;font-size:0.85rem;color:var(--text3);background:var(--navy3);cursor:pointer;transition:all 0.3s;font-weight:500}
+.filter-tag:hover,.filter-tag.active{border-color:var(--teal-border);color:var(--teal2);background:var(--teal-dim)}
+.filter-tag.active-gold{border-color:rgba(245,158,11,0.4);color:var(--gold2);background:rgba(245,158,11,0.08)}
+
+/* FEATURED POST */
+.featured-section{max-width:1100px;margin:0 auto 3rem;padding:0 0}
+.featured-label{font-size:0.78rem;font-weight:700;color:var(--gold);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:1rem;display:flex;align-items:center;gap:0.6rem}
+.featured-label::before{content:'';width:18px;height:2px;background:var(--gold);border-radius:2px}
+.featured-card{background:var(--navy3);border:1px solid var(--border);border-radius:16px;padding:2.5rem;display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:center;cursor:pointer;transition:all 0.3s;position:relative;overflow:hidden}
+.featured-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--gold),var(--gold2));transform:scaleX(0);transform-origin:right;transition:transform 0.4s}
+.featured-card:hover{border-color:rgba(245,158,11,0.3);transform:translateY(-3px);box-shadow:0 20px 50px rgba(0,0,0,0.4)}
+.featured-card:hover::before{transform:scaleX(1)}
+.featured-tag{display:inline-block;padding:4px 12px;border-radius:6px;font-size:0.78rem;font-weight:700;background:rgba(245,158,11,0.12);color:var(--gold2);border:1px solid rgba(245,158,11,0.25);margin-bottom:1rem;letter-spacing:0.05em}
+.featured-card h2{font-family:'Playfair Display',serif;font-size:clamp(1.4rem,2.5vw,1.9rem);font-weight:700;color:var(--text);margin-bottom:0.8rem;line-height:1.3}
+.featured-card p{font-size:0.98rem;color:var(--text2);line-height:1.9;margin-bottom:1.5rem}
+.featured-meta{display:flex;align-items:center;gap:1.2rem;font-size:0.85rem;color:var(--text3)}
+.featured-meta span{display:flex;align-items:center;gap:0.4rem}
+.featured-visual{background:linear-gradient(135deg,var(--navy4),var(--navy2));border-radius:12px;height:220px;display:flex;align-items:center;justify-content:center;font-size:4rem;border:1px solid var(--border2)}
+
+/* POSTS GRID */
+.posts-section{max-width:1100px;margin:0 auto;padding:0 0 6rem}
+.posts-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem}
+.post-card{background:var(--navy3);border:1px solid var(--border);border-radius:14px;overflow:hidden;cursor:pointer;transition:all 0.3s;position:relative}
+.post-card::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--teal),var(--teal2));transform:scaleX(0);transform-origin:right;transition:transform 0.4s}
+.post-card:hover{border-color:var(--teal-border);transform:translateY(-4px);box-shadow:0 16px 40px rgba(0,0,0,0.35)}
+.post-card:hover::after{transform:scaleX(1)}
+.post-card-emoji{background:linear-gradient(135deg,var(--navy4),var(--navy2));height:120px;display:flex;align-items:center;justify-content:center;font-size:2.8rem;border-bottom:1px solid var(--border)}
+.post-card-body{padding:1.5rem}
+.post-tag{display:inline-block;padding:3px 10px;border-radius:6px;font-size:0.75rem;font-weight:700;margin-bottom:0.8rem;letter-spacing:0.04em}
+.post-tag.tax{background:rgba(14,165,233,0.1);color:var(--teal2);border:1px solid var(--teal-border)}
+.post-tag.accounting{background:rgba(245,158,11,0.1);color:var(--gold2);border:1px solid rgba(245,158,11,0.25)}
+.post-tag.career{background:rgba(52,211,153,0.1);color:#34D399;border:1px solid rgba(52,211,153,0.25)}
+.post-tag.analysis{background:rgba(167,139,250,0.1);color:#A78BFA;border:1px solid rgba(167,139,250,0.25)}
+.post-card h3{font-size:1.05rem;font-weight:700;color:var(--text);margin-bottom:0.6rem;line-height:1.4}
+.post-card p{font-size:0.88rem;color:var(--text3);line-height:1.85;margin-bottom:1rem}
+.post-meta{display:flex;align-items:center;justify-content:space-between;font-size:0.8rem;color:var(--text3)}
+.read-more{color:var(--teal2);font-weight:600;font-size:0.85rem;display:flex;align-items:center;gap:0.3rem}
+
+/* POST MODAL */
+.post-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.9);z-index:9999;overflow-y:auto;padding:2rem 1rem}
+.post-modal.active{display:block}
+.post-modal-inner{max-width:780px;margin:0 auto;background:var(--navy2);border:1px solid var(--border2);border-radius:16px;overflow:hidden}
+.post-modal-header{padding:2rem 2.5rem 1rem;border-bottom:1px solid var(--border)}
+.post-modal-close{float:left;background:rgba(255,255,255,0.08);border:1px solid var(--border2);color:var(--text3);width:36px;height:36px;border-radius:8px;cursor:pointer;font-size:1.1rem;display:flex;align-items:center;justify-content:center;transition:all 0.2s;margin-bottom:1rem}
+.post-modal-close:hover{background:rgba(239,68,68,0.3);color:#fff}
+.post-modal-tag{display:inline-block;padding:4px 12px;border-radius:6px;font-size:0.8rem;font-weight:700;margin-bottom:1rem}
+.post-modal-title{font-family:'Playfair Display',serif;font-size:clamp(1.5rem,3vw,2rem);font-weight:700;color:var(--text);line-height:1.3;margin-bottom:0.8rem}
+.post-modal-meta{font-size:0.85rem;color:var(--text3);display:flex;gap:1.5rem;flex-wrap:wrap}
+.post-modal-content{padding:2rem 2.5rem 3rem;font-size:1rem;color:var(--text2);line-height:2}
+.post-modal-content h2{font-family:'Playfair Display',serif;font-size:1.3rem;color:var(--teal2);margin:2rem 0 0.8rem}
+.post-modal-content h3{font-size:1.1rem;font-weight:700;color:var(--text);margin:1.5rem 0 0.6rem}
+.post-modal-content p{margin-bottom:1.2rem}
+.post-modal-content ul,.post-modal-content ol{padding-right:1.5rem;margin-bottom:1.2rem}
+.post-modal-content li{margin-bottom:0.5rem}
+.post-modal-content strong{color:var(--text);font-weight:700}
+.post-modal-content .highlight-box{background:var(--navy3);border:1px solid var(--teal-border);border-radius:10px;padding:1.2rem 1.5rem;margin:1.5rem 0;border-right:3px solid var(--teal)}
+
+/* AI WRITE */
+.ai-section{max-width:1100px;margin:0 auto 4rem;background:var(--navy3);border:1px solid var(--border);border-radius:16px;padding:2.5rem}
+.ai-section h3{font-family:'Playfair Display',serif;font-size:1.4rem;color:var(--text);margin-bottom:0.5rem}
+.ai-section p{font-size:0.95rem;color:var(--text3);margin-bottom:1.5rem}
+.ai-form{display:flex;flex-direction:column;gap:1rem}
+.ai-form input,.ai-form select,.ai-form textarea{background:var(--navy4);border:1px solid var(--border2);border-radius:8px;padding:0.8rem 1rem;color:var(--text);font-family:'Tajawal',sans-serif;font-size:0.95rem;outline:none;transition:border-color 0.3s;direction:rtl}
+.ai-form input:focus,.ai-form select:focus,.ai-form textarea:focus{border-color:var(--teal)}
+.ai-form textarea{min-height:100px;resize:none}
+.ai-form select option{background:var(--navy3)}
+.ai-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.btn-ai{padding:0.85rem 2rem;background:linear-gradient(135deg,var(--teal),var(--teal2));color:#fff;font-family:'Tajawal',sans-serif;font-weight:700;font-size:1rem;border:none;border-radius:8px;cursor:pointer;transition:all 0.3s;display:flex;align-items:center;gap:0.6rem;justify-content:center}
+.btn-ai:hover{opacity:0.88;transform:translateY(-1px)}
+.btn-ai:disabled{opacity:0.5;cursor:not-allowed;transform:none}
+.ai-result{display:none;margin-top:1.5rem;background:var(--navy4);border:1px solid var(--teal-border);border-radius:12px;padding:1.8rem}
+.ai-result.active{display:block}
+.ai-result h4{font-size:1rem;font-weight:700;color:var(--teal2);margin-bottom:1rem}
+.ai-result-text{font-size:0.95rem;color:var(--text2);line-height:2;white-space:pre-wrap}
+
+footer{background:var(--navy2);border-top:1px solid var(--border);padding:2rem 5rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem}
+.footer-brand{font-family:'Playfair Display',serif;font-size:1rem;color:var(--text)}
+.footer-brand span{color:var(--teal2)}
+.footer-links{display:flex;gap:1.5rem}
+.footer-links a{color:var(--text3);font-size:0.92rem;text-decoration:none;font-weight:500;transition:color 0.3s}
+.footer-links a:hover{color:var(--teal2)}
+
+.fade-in{opacity:0;transform:translateY(20px);transition:opacity 0.6s ease,transform 0.6s ease}
+.fade-in.visible{opacity:1;transform:none}
+
+@media(max-width:900px){
+  nav{padding:1rem 1.5rem}.nav-links{display:none}
+  .blog-hero{padding:7rem 1.5rem 3rem}
+  .blog-controls,.featured-section,.posts-section,.ai-section{padding:0 1.5rem}
+  .featured-card{grid-template-columns:1fr}
+  .featured-visual{display:none}
+  .posts-grid{grid-template-columns:1fr}
+  .ai-row{grid-template-columns:1fr}
+  footer{padding:1.5rem;flex-direction:column;text-align:center}
+  .post-modal-inner{margin:1rem 0}
+  .post-modal-header,.post-modal-content{padding:1.5rem}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">محمد <span>العطار</span></a>
+  <ul class="nav-links">
+    <li><a href="index.html" data-ar="الرئيسية" data-en="Home">الرئيسية</a></li>
+    <li><a href="index.html#services" data-ar="الخدمات" data-en="Services">الخدمات</a></li>
+    <li><a href="index.html#contact" data-ar="التواصل" data-en="Contact">التواصل</a></li>
+    <li><a href="blog.html" style="color:var(--teal2)" data-ar="المدونة" data-en="Blog">المدونة</a></li>
+  </ul>
+  <button class="lang-btn" onclick="toggleLang()" id="langToggle">EN</button>
+</nav>
+
+<!-- HERO -->
+<div class="blog-hero">
+  <div class="blog-eyebrow" data-ar="أفكار ومعرفة مالية" data-en="Financial Insights & Knowledge">أفكار ومعرفة مالية</div>
+  <h1 class="blog-title" data-ar="مدونة <span>محمد العطار</span>" data-en="<span>Mohamed Elattar</span> Blog">مدونة <span>محمد العطار</span></h1>
+  <p class="blog-subtitle" data-ar="مقالات متخصصة في المحاسبة والتحليل المالي والزكاة والضريبة وتطوير المسيرة المهنية." data-en="Specialized articles on accounting, financial analysis, zakat, taxation, and career development.">مقالات متخصصة في المحاسبة والتحليل المالي والزكاة والضريبة وتطوير المسيرة المهنية.</p>
+</div>
+
+<!-- CONTROLS -->
+<div class="blog-controls fade-in" style="padding:0 5rem">
+  <div class="blog-search">
+    <input type="text" id="searchInput" placeholder="ابحث في المقالات..." oninput="filterPosts()">
+  </div>
+  <div class="filter-tags">
+    <span class="filter-tag active" onclick="filterByTag('all',this)" data-ar="الكل" data-en="All">الكل</span>
+    <span class="filter-tag" onclick="filterByTag('tax',this)" data-ar="زكاة وضريبة" data-en="Zakat & Tax">زكاة وضريبة</span>
+    <span class="filter-tag" onclick="filterByTag('accounting',this)" data-ar="محاسبة" data-en="Accounting">محاسبة</span>
+    <span class="filter-tag" onclick="filterByTag('analysis',this)" data-ar="تحليل مالي" data-en="Financial Analysis">تحليل مالي</span>
+    <span class="filter-tag" onclick="filterByTag('career',this)" data-ar="تطوير مهني" data-en="Career">تطوير مهني</span>
+  </div>
+</div>
+
+<!-- FEATURED -->
+<div class="featured-section fade-in" style="padding:2rem 5rem 0" id="featuredSection">
+  <div class="featured-label" data-ar="مقال مميز" data-en="FEATURED">مقال مميز</div>
+  <div class="featured-card" onclick="openPost(0)">
+    <div>
+      <span class="featured-tag" data-ar="زكاة وضريبة" data-en="Zakat & Tax">زكاة وضريبة</span>
+      <h2 data-ar="كيف تحسب وعاء الزكاة لشركتك بشكل صحيح؟" data-en="How to Calculate Your Company's Zakat Base Correctly?">كيف تحسب وعاء الزكاة لشركتك بشكل صحيح؟</h2>
+      <p data-ar="دليل عملي شامل لفهم وعاء الزكاة وكيفية احتسابه بدقة وفق المعايير المعتمدة، مع أمثلة تطبيقية من الواقع." data-en="A comprehensive practical guide to understanding and accurately calculating the zakat base according to approved standards, with real-world application examples.">دليل عملي شامل لفهم وعاء الزكاة وكيفية احتسابه بدقة وفق المعايير المعتمدة، مع أمثلة تطبيقية من الواقع.</p>
+      <div class="featured-meta">
+        <span>📅 <span data-ar="مايو 2025" data-en="May 2025">مايو 2025</span></span>
+        <span>⏱ <span data-ar="8 دقائق" data-en="8 min read">8 دقائق</span></span>
+        <span>👁 <span data-ar="قراءة المقال" data-en="Read Article">قراءة المقال</span></span>
+      </div>
+    </div>
+    <div class="featured-visual">🕌</div>
+  </div>
+</div>
+
+<!-- POSTS GRID -->
+<div class="posts-section fade-in" style="padding:2.5rem 5rem 0" id="postsGrid">
+  <div class="posts-grid" id="postsContainer">
+
+    <div class="post-card" onclick="openPost(1)" data-category="analysis">
+      <div class="post-card-emoji">📊</div>
+      <div class="post-card-body">
+        <span class="post-tag analysis" data-ar="تحليل مالي" data-en="Financial Analysis">تحليل مالي</span>
+        <h3 data-ar="5 مؤشرات مالية يجب أن يعرفها كل مدير مالي" data-en="5 Financial KPIs Every Finance Manager Must Know">5 مؤشرات مالية يجب أن يعرفها كل مدير مالي</h3>
+        <p data-ar="تعرف على أهم المؤشرات التي تكشف الصحة المالية الحقيقية لأي شركة بعيداً عن الأرقام المجردة." data-en="Discover the most important indicators that reveal the true financial health of any company beyond mere numbers.">تعرف على أهم المؤشرات التي تكشف الصحة المالية الحقيقية لأي شركة بعيداً عن الأرقام المجردة.</p>
+        <div class="post-meta">
+          <span data-ar="أبريل 2025" data-en="April 2025">أبريل 2025</span>
+          <span class="read-more" data-ar="قراءة ←" data-en="Read →">قراءة ←</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="post-card" onclick="openPost(2)" data-category="tax">
+      <div class="post-card-emoji">📋</div>
+      <div class="post-card-body">
+        <span class="post-tag tax" data-ar="زكاة وضريبة" data-en="Zakat & Tax">زكاة وضريبة</span>
+        <h3 data-ar="ضريبة القيمة المضافة: الأخطاء الشائعة وكيف تتجنبها" data-en="VAT: Common Mistakes and How to Avoid Them">ضريبة القيمة المضافة: الأخطاء الشائعة وكيف تتجنبها</h3>
+        <p data-ar="من خلال سنوات الخبرة، رصدت أكثر الأخطاء تكراراً في الإقرارات الضريبية وطرق تفاديها." data-en="Through years of experience, I've identified the most repeated mistakes in tax returns and how to avoid them.">من خلال سنوات الخبرة، رصدت أكثر الأخطاء تكراراً في الإقرارات الضريبية وطرق تفاديها.</p>
+        <div class="post-meta">
+          <span data-ar="مارس 2025" data-en="March 2025">مارس 2025</span>
+          <span class="read-more" data-ar="قراءة ←" data-en="Read →">قراءة ←</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="post-card" onclick="openPost(3)" data-category="career">
+      <div class="post-card-emoji">🎯</div>
+      <div class="post-card-body">
+        <span class="post-tag career" data-ar="تطوير مهني" data-en="Career">تطوير مهني</span>
+        <h3 data-ar="رحلتي نحو شهادة CMA: نصائح وتجارب حقيقية" data-en="My Journey to CMA: Real Tips and Experiences">رحلتي نحو شهادة CMA: نصائح وتجارب حقيقية</h3>
+        <p data-ar="أشارككم تجربتي الشخصية في التحضير لشهادة المحاسب الإداري المعتمد والدروس المستفادة." data-en="I share my personal experience preparing for the CMA certification and the lessons learned along the way.">أشارككم تجربتي الشخصية في التحضير لشهادة المحاسب الإداري المعتمد والدروس المستفادة.</p>
+        <div class="post-meta">
+          <span data-ar="فبراير 2025" data-en="February 2025">فبراير 2025</span>
+          <span class="read-more" data-ar="قراءة ←" data-en="Read →">قراءة ←</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="post-card" onclick="openPost(4)" data-category="accounting">
+      <div class="post-card-emoji">🏗️</div>
+      <div class="post-card-body">
+        <span class="post-tag accounting" data-ar="محاسبة" data-en="Accounting">محاسبة</span>
+        <h3 data-ar="محاسبة المقاولات: التحديات والحلول العملية" data-en="Contracting Accounting: Challenges and Practical Solutions">محاسبة المقاولات: التحديات والحلول العملية</h3>
+        <p data-ar="نظرة متعمقة في التحديات الخاصة بمحاسبة قطاع المقاولات وأبرز الحلول المحاسبية المعتمدة." data-en="An in-depth look at the unique challenges of contracting sector accounting and the leading approved solutions.">نظرة متعمقة في التحديات الخاصة بمحاسبة قطاع المقاولات وأبرز الحلول المحاسبية المعتمدة.</p>
+        <div class="post-meta">
+          <span data-ar="يناير 2025" data-en="January 2025">يناير 2025</span>
+          <span class="read-more" data-ar="قراءة ←" data-en="Read →">قراءة ←</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="post-card" onclick="openPost(5)" data-category="analysis">
+      <div class="post-card-emoji">📈</div>
+      <div class="post-card-body">
+        <span class="post-tag analysis" data-ar="تحليل مالي" data-en="Financial Analysis">تحليل مالي</span>
+        <h3 data-ar="النمذجة المالية: من الصفر إلى الاحتراف" data-en="Financial Modeling: From Zero to Professional">النمذجة المالية: من الصفر إلى الاحتراف</h3>
+        <p data-ar="دليلك الشامل لبناء نماذج مالية احترافية باستخدام Excel خطوة بخطوة مع أمثلة عملية." data-en="Your comprehensive guide to building professional financial models using Excel step by step with practical examples.">دليلك الشامل لبناء نماذج مالية احترافية باستخدام Excel خطوة بخطوة مع أمثلة عملية.</p>
+        <div class="post-meta">
+          <span data-ar="ديسمبر 2024" data-en="December 2024">ديسمبر 2024</span>
+          <span class="read-more" data-ar="قراءة ←" data-en="Read →">قراءة ←</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="post-card" onclick="openPost(6)" data-category="tax">
+      <div class="post-card-emoji">⚖️</div>
+      <div class="post-card-body">
+        <span class="post-tag tax" data-ar="زكاة وضريبة" data-en="Zakat & Tax">زكاة وضريبة</span>
+        <h3 data-ar="ضريبة الاستقطاع: دليل عملي للشركات السعودية" data-en="Withholding Tax: A Practical Guide for Saudi Companies">ضريبة الاستقطاع: دليل عملي للشركات السعودية</h3>
+        <p data-ar="كل ما تحتاج معرفته عن ضريبة الاستقطاع ومتى تطبق وكيف تحتسب وتسدد بشكل صحيح." data-en="Everything you need to know about withholding tax, when it applies, and how to calculate and pay it correctly.">كل ما تحتاج معرفته عن ضريبة الاستقطاع ومتى تطبق وكيف تحتسب وتسدد بشكل صحيح.</p>
+        <div class="post-meta">
+          <span data-ar="نوفمبر 2024" data-en="November 2024">نوفمبر 2024</span>
+          <span class="read-more" data-ar="قراءة ←" data-en="Read →">قراءة ←</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- AI WRITE SECTION -->
+<div class="ai-section fade-in" style="margin:3rem auto;max-width:1100px;margin-right:5rem;margin-left:5rem" id="aiSection">
+  <h3 data-ar="✍️ اكتب مقالاً جديداً بمساعدة AI" data-en="✍️ Write a New Article with AI Assistance">✍️ اكتب مقالاً جديداً بمساعدة AI</h3>
+  <p data-ar="أدخل موضوع المقال والتفاصيل وسيساعدك الذكاء الاصطناعي في كتابة مسودة احترافية." data-en="Enter the article topic and details and AI will help you write a professional draft.">أدخل موضوع المقال والتفاصيل وسيساعدك الذكاء الاصطناعي في كتابة مسودة احترافية.</p>
+  <div class="ai-form">
+    <div class="ai-row">
+      <input type="text" id="aiTitle" placeholder="عنوان المقال..." />
+      <select id="aiCategory">
+        <option value="">اختر التصنيف</option>
+        <option value="زكاة وضريبة">زكاة وضريبة</option>
+        <option value="محاسبة">محاسبة</option>
+        <option value="تحليل مالي">تحليل مالي</option>
+        <option value="تطوير مهني">تطوير مهني</option>
+      </select>
+    </div>
+    <textarea id="aiPoints" placeholder="النقاط الرئيسية التي تريد تغطيتها في المقال..."></textarea>
+    <div class="ai-row">
+      <select id="aiLang">
+        <option value="ar">عربي</option>
+        <option value="en">English</option>
+      </select>
+      <select id="aiTone">
+        <option value="professional">أسلوب مهني</option>
+        <option value="simple">أسلوب مبسط</option>
+        <option value="educational">أسلوب تعليمي</option>
+      </select>
+    </div>
+    <button class="btn-ai" id="aiBtn" onclick="generateArticle()">
+      <span id="aiBtnText">🤖 اكتب المقال بالذكاء الاصطناعي</span>
+    </button>
+  </div>
+  <div class="ai-result" id="aiResult">
+    <h4 id="aiResultTitle">المقال المقترح:</h4>
+    <div class="ai-result-text" id="aiResultText"></div>
+  </div>
+</div>
+
+<!-- POST MODAL -->
+<div class="post-modal" id="postModal">
+  <div class="post-modal-inner">
+    <div class="post-modal-header">
+      <button class="post-modal-close" onclick="closePost()">✕</button>
+      <span class="post-modal-tag" id="modalTag"></span>
+      <h2 class="post-modal-title" id="modalTitle"></h2>
+      <div class="post-modal-meta" id="modalMeta"></div>
+    </div>
+    <div class="post-modal-content" id="modalContent"></div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-brand">محمد <span>العطار</span> · Mohamed Elattar</div>
+  <div class="footer-links">
+    <a href="index.html" data-ar="الرئيسية" data-en="Home">الرئيسية</a>
+    <a href="index.html#contact" data-ar="التواصل" data-en="Contact">التواصل</a>
+  </div>
+  <span style="font-size:0.88rem;color:var(--text3)">© 2025</span>
+</footer>
+
+<script>
+// POSTS DATA
+const POSTS = [
+  {
+    id:0, category:'tax', emoji:'🕌',
+    tag_ar:'زكاة وضريبة', tag_en:'Zakat & Tax', tag_class:'tax',
+    title_ar:'كيف تحسب وعاء الزكاة لشركتك بشكل صحيح؟',
+    title_en:'How to Calculate Your Company\'s Zakat Base Correctly?',
+    date_ar:'مايو 2025', date_en:'May 2025', read:'8',
+    content_ar:`<h2>ما هو وعاء الزكاة؟</h2>
+<p>وعاء الزكاة هو المبلغ الذي تُحتسب منه نسبة الزكاة (2.5%)، ويختلف عن صافي الربح أو الأصول الكلية للشركة. فهم هذا المفهوم بدقة هو الخطوة الأولى نحو الامتثال الصحيح.</p>
+<div class="highlight-box">💡 <strong>قاعدة أساسية:</strong> وعاء الزكاة = الأصول الزكوية - الخصوم المعترف بها</div>
+<h2>الأصول الزكوية الرئيسية</h2>
+<p>تشمل الأصول التي تدخل في حساب الوعاء الزكوي:</p>
+<ul>
+<li><strong>النقد وما في حكمه:</strong> الأرصدة البنكية والنقد في الصندوق</li>
+<li><strong>المدينون والذمم المدينة:</strong> المبالغ المستحقة من العملاء</li>
+<li><strong>المخزون:</strong> البضائع الجاهزة والمواد الخام</li>
+<li><strong>الاستثمارات قصيرة الأجل:</strong> الأوراق المالية المتداولة</li>
+</ul>
+<h2>الخصوم المعترف بها</h2>
+<p>يُطرح من الوعاء الزكوي:</p>
+<ul>
+<li>الديون قصيرة الأجل المستحقة للغير</li>
+<li>الرواتب والأجور المستحقة</li>
+<li>الضرائب والرسوم المستحقة</li>
+</ul>
+<h2>مثال تطبيقي</h2>
+<div class="highlight-box">
+<strong>شركة تجارية — نهاية السنة المالية:</strong><br>
+النقد والبنك: 500,000 ريال<br>
+المدينون: 300,000 ريال<br>
+المخزون: 200,000 ريال<br>
+<strong>إجمالي الأصول الزكوية: 1,000,000 ريال</strong><br><br>
+الدائنون: 150,000 ريال<br>
+قروض قصيرة الأجل: 100,000 ريال<br>
+<strong>إجمالي الخصوم: 250,000 ريال</strong><br><br>
+<strong>وعاء الزكاة = 750,000 ريال</strong><br>
+<strong>الزكاة المستحقة = 750,000 × 2.5% = 18,750 ريال</strong>
+</div>
+<h2>نصائح مهمة</h2>
+<p>من خلال خبرتي في التعامل مع هيئة الزكاة والضريبة والجمارك، إليك أبرز النصائح:</p>
+<ul>
+<li>احتفظ بتوثيق كامل لجميع أصولك وخصومك</li>
+<li>تأكد من تواريخ الاستحقاق للخصوم المطروحة</li>
+<li>استشر متخصصاً عند التعامل مع الأصول الثابتة والاستثمارات طويلة الأجل</li>
+<li>قدّم إقرارك في الموعد المحدد لتجنب الغرامات</li>
+</ul>`,
+    content_en:`<h2>What is the Zakat Base?</h2>
+<p>The zakat base is the amount from which the zakat rate (2.5%) is calculated. It differs from net profit or total assets. Understanding this concept accurately is the first step toward proper compliance.</p>
+<div class="highlight-box">💡 <strong>Basic rule:</strong> Zakat Base = Zakatable Assets - Recognized Liabilities</div>
+<h2>Main Zakatable Assets</h2>
+<ul>
+<li><strong>Cash and equivalents:</strong> Bank balances and cash on hand</li>
+<li><strong>Receivables:</strong> Amounts due from customers</li>
+<li><strong>Inventory:</strong> Finished goods and raw materials</li>
+<li><strong>Short-term investments:</strong> Tradable securities</li>
+</ul>
+<h2>Practical Example</h2>
+<div class="highlight-box">
+Cash & Bank: SAR 500,000<br>
+Receivables: SAR 300,000<br>
+Inventory: SAR 200,000<br>
+<strong>Total Zakatable Assets: SAR 1,000,000</strong><br><br>
+Payables: SAR 150,000 | Short-term loans: SAR 100,000<br>
+<strong>Zakat Base = SAR 750,000</strong><br>
+<strong>Zakat Due = SAR 750,000 × 2.5% = SAR 18,750</strong>
+</div>`
+  },
+  {
+    id:1, category:'analysis', emoji:'📊',
+    tag_ar:'تحليل مالي', tag_en:'Financial Analysis', tag_class:'analysis',
+    title_ar:'5 مؤشرات مالية يجب أن يعرفها كل مدير مالي',
+    title_en:'5 Financial KPIs Every Finance Manager Must Know',
+    date_ar:'أبريل 2025', date_en:'April 2025', read:'6',
+    content_ar:`<h2>لماذا المؤشرات المالية مهمة؟</h2>
+<p>المؤشرات المالية هي البوصلة التي توجه القرارات الاستراتيجية. الأرقام وحدها لا تكفي — تحتاج إلى مؤشرات تكشف القصة الحقيقية خلف الأرقام.</p>
+<h2>المؤشر الأول: نسبة السيولة السريعة (Quick Ratio)</h2>
+<div class="highlight-box">Quick Ratio = (النقد + الذمم المدينة) ÷ الخصوم المتداولة<br>المعيار المقبول: أكثر من 1</div>
+<p>يقيس قدرة الشركة على سداد التزاماتها قصيرة الأجل دون الاعتماد على المخزون.</p>
+<h2>المؤشر الثاني: هامش الربح الصافي</h2>
+<div class="highlight-box">Net Margin = صافي الربح ÷ الإيرادات × 100</div>
+<p>يكشف كم ريال يتبقى لكل 100 ريال من الإيرادات بعد كل التكاليف والضرائب.</p>
+<h2>المؤشر الثالث: العائد على حقوق الملكية (ROE)</h2>
+<div class="highlight-box">ROE = صافي الربح ÷ حقوق الملكية × 100</div>
+<p>يقيس كفاءة إدارة رأس المال المستثمر من قِبل المساهمين.</p>
+<h2>المؤشر الرابع: دوران الأصول</h2>
+<p>يقيس مدى كفاءة الشركة في استخدام أصولها لتوليد الإيرادات. كلما ارتفع المؤشر، كانت الكفاءة أعلى.</p>
+<h2>المؤشر الخامس: نسبة الدين إلى حقوق الملكية</h2>
+<p>يكشف مستوى الرفع المالي ومخاطر الديون. النسبة المرتفعة تعني اعتماداً أكبر على التمويل الخارجي.</p>`,
+    content_en:`<h2>Why Financial KPIs Matter</h2>
+<p>Financial indicators are the compass that guides strategic decisions. Numbers alone are not enough — you need indicators that reveal the real story behind the numbers.</p>
+<h2>KPI 1: Quick Ratio</h2>
+<div class="highlight-box">Quick Ratio = (Cash + Receivables) ÷ Current Liabilities | Target: Above 1</div>
+<h2>KPI 2: Net Profit Margin</h2>
+<div class="highlight-box">Net Margin = Net Profit ÷ Revenue × 100</div>
+<h2>KPI 3: Return on Equity (ROE)</h2>
+<div class="highlight-box">ROE = Net Profit ÷ Equity × 100</div>
+<h2>KPI 4: Asset Turnover</h2>
+<p>Measures how efficiently the company uses its assets to generate revenue.</p>
+<h2>KPI 5: Debt-to-Equity Ratio</h2>
+<p>Reveals the level of financial leverage and debt risk.</p>`
+  },
+  {
+    id:2, category:'tax', emoji:'📋',
+    tag_ar:'زكاة وضريبة', tag_en:'Zakat & Tax', tag_class:'tax',
+    title_ar:'ضريبة القيمة المضافة: الأخطاء الشائعة وكيف تتجنبها',
+    title_en:'VAT: Common Mistakes and How to Avoid Them',
+    date_ar:'مارس 2025', date_en:'March 2025', read:'7',
+    content_ar:`<h2>من تجربتي في ميدان العمل</h2>
+<p>خلال سنوات عملي في مراجعة الإقرارات الضريبية، رصدت أنماطاً متكررة من الأخطاء تكلف الشركات غرامات يمكن تجنبها بسهولة.</p>
+<h2>الخطأ الأول: التسجيل المتأخر</h2>
+<div class="highlight-box">⚠️ يجب التسجيل حين يتجاوز حجم المبيعات 375,000 ريال سنوياً</div>
+<p>كثير من الشركات الناشئة تتجاهل حد التسجيل الإلزامي وتتفاجأ بالغرامات لاحقاً.</p>
+<h2>الخطأ الثاني: خصم ضريبة المدخلات بشكل خاطئ</h2>
+<p>ليس كل ضريبة مدفوعة قابلة للاسترداد. المصاريف الشخصية والترفيهية عادةً غير مؤهلة.</p>
+<h2>الخطأ الثالث: التاريخ الضريبي الخاطئ</h2>
+<p>تاريخ الضريبة يختلف عن تاريخ الفاتورة في حالات عديدة، خاصة في عقود الخدمات المستمرة.</p>
+<h2>الخطأ الرابع: إهمال المعاملات العابرة للحدود</h2>
+<p>الخدمات المستوردة من الخارج تخضع لآلية الاحتساب العكسي — كثيرون لا يعلمون بها.</p>
+<h2>كيف تتجنب هذه الأخطاء؟</h2>
+<ul>
+<li>ضع نظام مراجعة شهري للفواتير قبل تقديم الإقرار</li>
+<li>درّب فريقك المحاسبي على آخر التحديثات الضريبية</li>
+<li>استعن بمتخصص لمراجعة أول إقرار ضريبي على الأقل</li>
+</ul>`,
+    content_en:`<h2>From My Field Experience</h2>
+<p>Through years of reviewing tax returns, I've identified recurring patterns of mistakes that cost companies easily avoidable penalties.</p>
+<h2>Mistake 1: Late Registration</h2>
+<div class="highlight-box">⚠️ Must register when sales exceed SAR 375,000 annually</div>
+<h2>Mistake 2: Incorrect Input Tax Deduction</h2>
+<p>Not every tax paid is recoverable. Personal and entertainment expenses are usually not eligible.</p>
+<h2>Mistake 3: Wrong Tax Date</h2>
+<p>The tax date differs from the invoice date in many cases, especially in continuous service contracts.</p>
+<h2>How to Avoid These Mistakes?</h2>
+<ul>
+<li>Set up a monthly invoice review system before filing</li>
+<li>Train your accounting team on latest tax updates</li>
+<li>Consult a specialist for at least your first tax return</li>
+</ul>`
+  },
+  {
+    id:3, category:'career', emoji:'🎯',
+    tag_ar:'تطوير مهني', tag_en:'Career', tag_class:'career',
+    title_ar:'رحلتي نحو شهادة CMA: نصائح وتجارب حقيقية',
+    title_en:'My Journey to CMA: Real Tips and Experiences',
+    date_ar:'فبراير 2025', date_en:'February 2025', read:'9',
+    content_ar:`<h2>لماذا اخترت CMA؟</h2>
+<p>بعد سنوات في الميدان المالي، أدركت أن CMA ليست مجرد شهادة — إنها طريقة تفكير مختلفة في إدارة الأعمال والمالية. القرار جاء بعد تقييم دقيق لاحتياجات مسيرتي المهنية.</p>
+<h2>هيكل الامتحان</h2>
+<div class="highlight-box">
+الجزء الأول: التخطيط والميزانية والأداء<br>
+الجزء الثاني: الأداء الاستراتيجي والإدارة المالية<br>
+كل جزء: 100 سؤال اختيار + سؤالين مقاليين<br>
+مدة كل جزء: 4 ساعات
+</div>
+<h2>منهجية التحضير</h2>
+<p>استغرق تحضيري نحو 8 أشهر مع الالتزام بـ 2-3 ساعات يومياً:</p>
+<ul>
+<li><strong>الشهر 1-2:</strong> قراءة المنهج الكامل وبناء الأساس</li>
+<li><strong>الشهر 3-5:</strong> حل الأسئلة وتحديد نقاط الضعف</li>
+<li><strong>الشهر 6-7:</strong> المراجعة المكثفة والمحاكاة</li>
+<li><strong>الشهر 8:</strong> مراجعة نهائية وراحة نفسية</li>
+</ul>
+<h2>نصائحي لك</h2>
+<ul>
+<li>لا تستعجل — الفهم العميق أهم من السرعة</li>
+<li>المجموعات الدراسية تساعد كثيراً في التثبيت</li>
+<li>ربط المادة بعملك اليومي يسهّل الاستيعاب</li>
+<li>الجزء الثاني أصعب — خصص له وقتاً أطول</li>
+</ul>`,
+    content_en:`<h2>Why I Chose CMA?</h2>
+<p>After years in finance, I realized CMA is not just a certificate — it's a different way of thinking about business management and finance.</p>
+<h2>Exam Structure</h2>
+<div class="highlight-box">
+Part 1: Planning, Budgeting & Performance<br>
+Part 2: Strategic Financial Management<br>
+Each part: 100 MCQs + 2 essay questions | 4 hours each
+</div>
+<h2>My Preparation Strategy</h2>
+<ul>
+<li><strong>Month 1-2:</strong> Read full curriculum, build foundation</li>
+<li><strong>Month 3-5:</strong> Practice questions, identify weak points</li>
+<li><strong>Month 6-7:</strong> Intensive review and mock exams</li>
+<li><strong>Month 8:</strong> Final review and mental preparation</li>
+</ul>
+<h2>My Top Tips</h2>
+<ul>
+<li>Don't rush — deep understanding beats speed</li>
+<li>Study groups greatly help retention</li>
+<li>Connecting material to your daily work aids comprehension</li>
+</ul>`
+  },
+  {
+    id:4, category:'accounting', emoji:'🏗️',
+    tag_ar:'محاسبة', tag_en:'Accounting', tag_class:'accounting',
+    title_ar:'محاسبة المقاولات: التحديات والحلول العملية',
+    title_en:'Contracting Accounting: Challenges and Practical Solutions',
+    date_ar:'يناير 2025', date_en:'January 2025', read:'7',
+    content_ar:`<h2>ما يجعل محاسبة المقاولات مختلفة؟</h2>
+<p>على عكس الشركات التجارية، شركات المقاولات تتعامل مع عقود طويلة الأجل تمتد لسنوات، مما يطرح تساؤلات محاسبية معقدة حول توقيت الاعتراف بالإيرادات.</p>
+<h2>معيار IFRS 15: الإيرادات من العقود</h2>
+<div class="highlight-box">طريقة نسبة الإنجاز = التكاليف المتكبدة ÷ إجمالي التكاليف المقدرة × 100%</div>
+<p>هذه الطريقة تعكس الواقع الاقتصادي للعقد بشكل أدق من طريقة العقد المكتمل.</p>
+<h2>التحديات الشائعة</h2>
+<ul>
+<li><strong>تغييرات نطاق العمل:</strong> التعديلات على العقد تؤثر على التكاليف والإيرادات</li>
+<li><strong>المطالبات والمستحقات:</strong> متى تُعترف بها محاسبياً؟</li>
+<li><strong>تكاليف التعبئة والتجهيز:</strong> هل تُرسمل أم تُعالج كمصروف؟</li>
+</ul>
+<h2>أفضل الممارسات</h2>
+<ul>
+<li>حافظ على تتبع دقيق للتكاليف لكل مشروع على حدة</li>
+<li>راجع التقديرات بانتظام وحدّثها</li>
+<li>وثّق كل تعديل في نطاق العمل فور حدوثه</li>
+</ul>`,
+    content_en:`<h2>What Makes Contracting Accounting Different?</h2>
+<p>Unlike commercial companies, contracting firms deal with long-term contracts spanning years, raising complex accounting questions about revenue recognition timing.</p>
+<h2>IFRS 15: Revenue from Contracts</h2>
+<div class="highlight-box">Completion % = Costs Incurred ÷ Total Estimated Costs × 100%</div>
+<h2>Common Challenges</h2>
+<ul>
+<li><strong>Scope changes:</strong> Contract modifications affect both costs and revenues</li>
+<li><strong>Claims and variations:</strong> When should they be recognized?</li>
+<li><strong>Mobilization costs:</strong> Capitalize or expense?</li>
+</ul>`
+  },
+  {
+    id:5, category:'analysis', emoji:'📈',
+    tag_ar:'تحليل مالي', tag_en:'Financial Analysis', tag_class:'analysis',
+    title_ar:'النمذجة المالية: من الصفر إلى الاحتراف',
+    title_en:'Financial Modeling: From Zero to Professional',
+    date_ar:'ديسمبر 2024', date_en:'December 2024', read:'10',
+    content_ar:`<h2>ما هي النمذجة المالية؟</h2>
+<p>النمذجة المالية هي بناء تمثيل رياضي للوضع المالي للشركة لاتخاذ قرارات مستنيرة. إنها الجسر بين البيانات التاريخية والمستقبل المتوقع.</p>
+<h2>أنواع النماذج المالية</h2>
+<ul>
+<li><strong>نموذج التدفق النقدي المخصوم (DCF):</strong> لتقييم الاستثمارات</li>
+<li><strong>نموذج الميزانية التقديرية:</strong> للتخطيط السنوي</li>
+<li><strong>نموذج السيناريو:</strong> لاختبار الافتراضات</li>
+<li><strong>نموذج الاندماج والاستحواذ:</strong> لتقييم صفقات M&A</li>
+</ul>
+<h2>مبادئ النموذج الجيد</h2>
+<div class="highlight-box">
+✅ البساطة: لا تعقيد غير ضروري<br>
+✅ المرونة: تغيير الافتراضات بسهولة<br>
+✅ الشفافية: كل معادلة قابلة للتتبع<br>
+✅ التوثيق: شرح كل افتراض
+</div>
+<h2>خطوات بناء نموذج DCF</h2>
+<ol>
+<li>تحليل البيانات التاريخية (3-5 سنوات)</li>
+<li>بناء افتراضات النمو والتكاليف</li>
+<li>توقع التدفقات النقدية الحرة (5-10 سنوات)</li>
+<li>حساب معدل الخصم (WACC)</li>
+<li>احتساب القيمة النهائية</li>
+<li>تحليل الحساسية</li>
+</ol>`,
+    content_en:`<h2>What is Financial Modeling?</h2>
+<p>Financial modeling is building a mathematical representation of a company's financial position to make informed decisions.</p>
+<h2>Types of Financial Models</h2>
+<ul>
+<li><strong>DCF Model:</strong> For investment valuation</li>
+<li><strong>Budget Model:</strong> For annual planning</li>
+<li><strong>Scenario Model:</strong> For assumption testing</li>
+<li><strong>M&A Model:</strong> For deal evaluation</li>
+</ul>
+<h2>Principles of a Good Model</h2>
+<div class="highlight-box">
+✅ Simplicity | ✅ Flexibility | ✅ Transparency | ✅ Documentation
+</div>`
+  },
+  {
+    id:6, category:'tax', emoji:'⚖️',
+    tag_ar:'زكاة وضريبة', tag_en:'Zakat & Tax', tag_class:'tax',
+    title_ar:'ضريبة الاستقطاع: دليل عملي للشركات السعودية',
+    title_en:'Withholding Tax: A Practical Guide for Saudi Companies',
+    date_ar:'نوفمبر 2024', date_en:'November 2024', read:'6',
+    content_ar:`<h2>ما هي ضريبة الاستقطاع؟</h2>
+<p>ضريبة الاستقطاع هي ضريبة تُحتجز من المدفوعات لغير المقيمين في المملكة. الشركة الدافعة هي المسؤولة عن حجب الضريبة وتوريدها للهيئة.</p>
+<h2>متى تطبق ضريبة الاستقطاع؟</h2>
+<div class="highlight-box">
+تطبق على المدفوعات لغير المقيمين مقابل:<br>
+• الخدمات التقنية والاستشارية<br>
+• الإيجارات والعوائد<br>
+• رسوم الإدارة والخدمات<br>
+• توزيعات الأرباح والفوائد
+</div>
+<h2>نسب الاستقطاع الرئيسية</h2>
+<ul>
+<li>الخدمات التقنية: 5%</li>
+<li>الإيجارات: 15%</li>
+<li>توزيعات الأرباح: 5%</li>
+<li>خدمات الإدارة: 20%</li>
+</ul>
+<h2>الأخطاء الشائعة</h2>
+<ul>
+<li>عدم التحقق من إقامة المورد قبل الدفع</li>
+<li>تطبيق نسبة خاطئة بسبب تصنيف الخدمة</li>
+<li>إغفال اتفاقيات تجنب الازدواج الضريبي</li>
+</ul>`,
+    content_en:`<h2>What is Withholding Tax?</h2>
+<p>Withholding tax is a tax withheld from payments to non-residents. The paying company is responsible for withholding and remitting it to ZATCA.</p>
+<h2>Main WHT Rates</h2>
+<ul>
+<li>Technical services: 5%</li>
+<li>Rentals: 15%</li>
+<li>Dividends: 5%</li>
+<li>Management services: 20%</li>
+</ul>`
+  }
+];
+
+let currentLang = 'ar';
+let activeCategory = 'all';
+
+function openPost(idx){
+  const p = POSTS[idx];
+  const modal = document.getElementById('postModal');
+  const tag = document.getElementById('modalTag');
+  tag.textContent = currentLang==='ar' ? p.tag_ar : p.tag_en;
+  tag.className = 'post-modal-tag post-tag ' + p.tag_class;
+  document.getElementById('modalTitle').textContent = currentLang==='ar' ? p.title_ar : p.title_en;
+  document.getElementById('modalMeta').innerHTML = `<span>📅 ${currentLang==='ar'?p.date_ar:p.date_en}</span><span>⏱ ${p.read} ${currentLang==='ar'?'دقائق':'min read'}</span>`;
+  document.getElementById('modalContent').innerHTML = currentLang==='ar' ? p.content_ar : p.content_en;
+  modal.classList.add('active');
+  document.body.style.overflow='hidden';
+}
+
+function closePost(){
+  document.getElementById('postModal').classList.remove('active');
+  document.body.style.overflow='';
+}
+
+document.getElementById('postModal').addEventListener('click', function(e){
+  if(e.target === this) closePost();
+});
+
+function filterByTag(cat, el){
+  activeCategory = cat;
+  document.querySelectorAll('.filter-tag').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  filterPosts();
+}
+
+function filterPosts(){
+  const search = document.getElementById('searchInput').value.toLowerCase();
+  const cards = document.querySelectorAll('.post-card');
+  cards.forEach((card,i)=>{
+    const p = POSTS[i+1];
+    if(!p) return;
+    const matchCat = activeCategory==='all' || p.category===activeCategory;
+    const title = (currentLang==='ar' ? p.title_ar : p.title_en).toLowerCase();
+    const matchSearch = !search || title.includes(search);
+    card.style.display = matchCat && matchSearch ? '' : 'none';
+  });
+  const featuredSection = document.getElementById('featuredSection');
+  if(activeCategory !== 'all' && activeCategory !== 'tax'){
+    featuredSection.style.display = 'none';
+  } else {
+    featuredSection.style.display = '';
+  }
+}
+
+async function generateArticle(){
+  const title = document.getElementById('aiTitle').value.trim();
+  const category = document.getElementById('aiCategory').value;
+  const points = document.getElementById('aiPoints').value.trim();
+  const lang = document.getElementById('aiLang').value;
+  const tone = document.getElementById('aiTone').value;
+
+  if(!title){ alert(currentLang==='ar'?'أدخل عنوان المقال':'Please enter article title'); return; }
+
+  const btn = document.getElementById('aiBtn');
+  const btnText = document.getElementById('aiBtnText');
+  btn.disabled = true;
+  btnText.textContent = currentLang==='ar' ? '⟳ جارٍ الكتابة...' : '⟳ Writing...';
+
+  const toneMap = {professional:'مهني واحترافي',simple:'مبسط وسهل الفهم',educational:'تعليمي تدريبي'};
+  const prompt = lang==='ar'
+    ? `اكتب مقالاً ${toneMap[tone]||'مهنياً'} بالعربية في مجال ${category||'المالية'} بعنوان: "${title}"\n${points?'النقاط الرئيسية:\n'+points:''}\n\nاكتب المقال بشكل منظم مع عناوين فرعية ونقاط واضحة. المقال يجب أن يكون عملياً ومفيداً ويعكس خبرة مالية حقيقية.`
+    : `Write a ${tone} article in English about ${category||'finance'} titled: "${title}"\n${points?'Key points:\n'+points:''}\n\nWrite a well-structured article with subheadings and clear points. Make it practical and reflect real financial expertise.`;
+
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({
+        model:'claude-sonnet-4-20250514',
+        max_tokens:1500,
+        messages:[{role:'user',content:prompt}]
+      })
+    });
+    const data = await res.json();
+    const text = data.content?.[0]?.text || (currentLang==='ar'?'حدث خطأ':'An error occurred');
+    document.getElementById('aiResultTitle').textContent = currentLang==='ar'?'المقال المقترح:':'Suggested Article:';
+    document.getElementById('aiResultText').textContent = text;
+    document.getElementById('aiResult').classList.add('active');
+    document.getElementById('aiResult').scrollIntoView({behavior:'smooth',block:'start'});
+  } catch(e){
+    document.getElementById('aiResultText').textContent = currentLang==='ar'?'حدث خطأ في الاتصال':'Connection error';
+    document.getElementById('aiResult').classList.add('active');
+  }
+
+  btn.disabled = false;
+  btnText.textContent = currentLang==='ar'?'🤖 اكتب المقال بالذكاء الاصطناعي':'🤖 Generate Article with AI';
+}
+
+let isEn = false;
+function toggleLang(){
+  isEn = !isEn;
+  currentLang = isEn ? 'en' : 'ar';
+  const body = document.body;
+  const btn = document.getElementById('langToggle');
+  if(isEn){
+    body.classList.add('en');body.setAttribute('dir','ltr');body.setAttribute('lang','en');
+    btn.textContent='AR';
+    document.querySelectorAll('[data-en]').forEach(el=>{
+      if(el.tagName==='INPUT') el.placeholder=el.getAttribute('data-en')||el.placeholder;
+      else el.textContent=el.getAttribute('data-en');
+    });
+    document.querySelector('.nav-logo').innerHTML='Mohamed <span>Elattar</span>';
+    document.querySelector('.footer-brand').innerHTML='Mohamed <span>Elattar</span>';
+    document.getElementById('searchInput').placeholder='Search articles...';
+    document.getElementById('searchInput').setAttribute('dir','ltr');
+    document.getElementById('aiTitle').placeholder='Article title...';
+    document.getElementById('aiPoints').placeholder='Main points to cover...';
+    document.getElementById('aiBtnText').textContent='🤖 Generate Article with AI';
+    document.getElementById('blogTitle') && (document.getElementById('blogTitle').innerHTML='<span>Mohamed Elattar</span> Blog');
+  } else {
+    body.classList.remove('en');body.setAttribute('dir','rtl');body.setAttribute('lang','ar');
+    btn.textContent='EN';
+    document.querySelectorAll('[data-ar]').forEach(el=>{
+      if(el.tagName==='INPUT') el.placeholder=el.getAttribute('data-ar')||el.placeholder;
+      else el.textContent=el.getAttribute('data-ar');
+    });
+    document.querySelector('.nav-logo').innerHTML='محمد <span>العطار</span>';
+    document.querySelector('.footer-brand').innerHTML='محمد <span>العطار</span>';
+    document.getElementById('searchInput').placeholder='ابحث في المقالات...';
+    document.getElementById('searchInput').setAttribute('dir','rtl');
+    document.getElementById('aiTitle').placeholder='عنوان المقال...';
+    document.getElementById('aiPoints').placeholder='النقاط الرئيسية التي تريد تغطيتها...';
+    document.getElementById('aiBtnText').textContent='🤖 اكتب المقال بالذكاء الاصطناعي';
+  }
+}
+
+// Fade in
+const obs = new IntersectionObserver(e=>{e.forEach(x=>{if(x.isIntersecting)x.target.classList.add('visible')})},{threshold:0.1});
+document.querySelectorAll('.fade-in').forEach(el=>obs.observe(el));
+</script>
+</body>
+</html>
